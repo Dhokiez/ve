@@ -12,12 +12,22 @@
             --glass: rgba(255, 255, 255, 0.15);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* Mengunci seluruh layar agar tidak bisa digeser-geser */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: none; /* Mematikan gesture zoom & scroll liar */
+        }
         
-        body {
+        html, body {
             margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden; /* Mutlak: tidak boleh ada scrollbar */
+            position: fixed; /* Memastikan posisi tetap di viewport */
+        }
+
+        body {
             font-family: 'Poppins', sans-serif;
-            height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
             background: #0f0c29;
         }
@@ -40,10 +50,9 @@
             to { transform: translate(100%, 80%); }
         }
 
-        /* --- CONTAINER RESPONSIVE --- */
         .container {
             position: relative; z-index: 10;
-            width: 90%; max-width: 400px;
+            width: 85%; max-width: 380px;
             padding: 25px; border-radius: 30px;
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -51,16 +60,17 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             text-align: center;
+            /* Scroll hanya diperbolehkan di dalam box surat jika kepanjangan */
+            overflow: visible; 
         }
 
-        /* --- FOTO & HADIAH --- */
         .gift-container img {
-            width: 110px; border-radius: 15px; margin-bottom: 10px;
+            width: 100px; border-radius: 15px; margin-bottom: 10px;
         }
 
         .photo-wrap {
             position: relative; display: none; margin: 0 auto 15px;
-            width: 130px; height: 130px;
+            width: 120px; height: 120px;
         }
         .photo-wrap img {
             width: 100%; height: 100%; border-radius: 50%;
@@ -82,7 +92,6 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* --- BOX SURAT --- */
         #letterBody {
             font-size: 0.85em; 
             color: rgba(255,255,255,0.95);
@@ -93,12 +102,11 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 15px; 
             border-radius: 15px;
-            max-height: 200px; 
+            max-height: 180px; /* Batasi agar tidak meledak keluar container */
             overflow-y: auto;
-            scrollbar-width: thin;
+            touch-action: pan-y; /* Hanya izinkan scroll vertikal di sini */
         }
 
-        /* --- INPUT --- */
         #userAns {
             background: rgba(255, 255, 255, 0.15); 
             border: 1px solid rgba(255,255,255,0.4);
@@ -107,55 +115,38 @@
             outline: none; margin: 10px 0; text-align: center;
             font-size: 0.9em;
         }
-        #userAns::placeholder { color: rgba(255,255,255,0.6); }
 
-        /* --- TOMBOL --- */
         .btn-group {
-            display: flex; flex-direction: row; justify-content: center; 
-            gap: 10px; margin-top: 15px;
-            position: relative; min-height: 50px;
+            display: flex; justify-content: center; gap: 10px; 
+            margin-top: 15px; position: relative;
         }
 
         button {
             background: linear-gradient(45deg, var(--primary), #ff758f);
             color: white; border: none; padding: 10px 20px;
             border-radius: 25px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(255, 77, 109, 0.3); transition: 0.3s;
             font-size: 0.9em;
         }
 
         #noBtn { 
             background: #555; 
-            transition: transform 0.3s ease;
-            white-space: nowrap;
+            transition: 0.2s ease;
+            position: relative; /* Penting agar tetap dalam koordinat container */
         }
 
         canvas { position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
         
-        #overlay {
-            position: fixed; inset: 0; background: #0f0c29;
-            z-index: 1000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; color: white; padding: 20px;
-            text-align: center;
+        #overlay, #ngambek-overlay {
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
         }
-
-        #ngambek-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            z-index: 2000; display: none; flex-direction: column;
-            justify-content: center; align-items: center; color: white;
-            text-align: center; padding: 30px;
-        }
+        #overlay { background: #0f0c29; z-index: 1000; padding: 20px; touch-action: none;}
+        #ngambek-overlay { background: rgba(0,0,0,0.95); z-index: 2000; display: none; padding: 30px; touch-action: none; }
 
         .choco-btn {
             background: linear-gradient(45deg, #603813, #b2945e) !important;
-            margin-top: 15px; display: none; width: 100%;
-        }
-
-        /* Media Query untuk Layar Sangat Kecil */
-        @media (max-height: 600px) {
-            .container { padding: 15px; }
-            .photo-wrap { width: 100px; height: 100px; }
-            h3 { font-size: 1.5em; }
+            margin-top: 10px; display: none; width: 100%;
         }
     </style>
 </head>
@@ -169,21 +160,21 @@
     <canvas id="canvas"></canvas>
 
     <div id="overlay">
-        <h1 style="font-family: 'Dancing Script'; font-size: 2.5em;">Buat Kamu Yang Tersayang...</h1>
+        <h1 style="font-family: 'Dancing Script'; font-size: 2.2em; color: white;">Buat Kamu Yang Tersayang...</h1>
         <button onclick="startApp()">Klik untuk Membuka ✨</button>
     </div>
 
     <div id="ngambek-overlay">
-        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenpjNTBkeW9xdjFpenh1c3Y0MmhsMjVyeHVxcGxlbTl2ajZqZmp0YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fFa05KbZowXiEIyRse/giphy.gif" width="180" style="border-radius: 20px;">
-        <h2 style="margin-top: 20px;">IH KOK GITU?! </h2>
-        <p>Pilih "Yes" dong, masa gak mau parah sihh...🙃</p>
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenpjNTBkeW9xdjFpenh1c3Y0MmhsMjVyeHVxcGxlbTl2ajZqZmp0YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fFa05KbZowXiEIyRse/giphy.gif" width="180">
+        <h2 style="margin-top: 20px; color: white;">IH KOK GITU?! 😭</h2>
+        <p style="color: white;">Pilih "Yes" dong sayang...</p>
         <button onclick="tutupNgambek()">Balik</button>
     </div>
 
     <div class="container">
         <div id="quiz-section">
             <div class="gift-container">
-                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGh0bjBsYWg5NTVydzVleXRpdGJoMXQ0ZG5ydmdrcTEwaXBrdXZpYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GJACwlJbtiWrYeWoqM/giphy.gif" alt="Cute Cat">
+                <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGh0bjBsYWg5NTVydzVleXRpdGJoMXQ0ZG5ydmdrcTEwaXBrdXZpYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GJACwlJbtiWrYeWoqM/giphy.gif">
             </div>
             <h3>Tebak Tebakan dulu..</h3>
             <p style="color: #eee; font-size: 0.85em;">Apa bedanya kamu sama internet?</p>
@@ -194,13 +185,13 @@
 
         <div id="choice-section" style="display: none;">
             <div class="gift-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY25nMDBhOTR1Y2k0em04NWdndG44enl0Y3B5Y2VkODYxdGxlZ3NveiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IzXiddo2twMmdmU8Lv/giphy.gif" alt="Cute Choice">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY25nMDBhOTR1Y2k0em04NWdndG44enl0Y3B5Y2VkODYxdGxlZ3NveiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IzXiddo2twMmdmU8Lv/giphy.gif">
             </div>
             <h3>Jawaban Benar! ✨</h3>
-            <p style="color: #eee; font-size: 0.85em;">Tapi yakin mau buka suratnya sekarang?</p>
+            <p style="color: #eee; font-size: 0.85em;">Tapi yakin mau buka sekarang?</p>
             <div class="btn-group">
                 <button onclick="showFinal()">Yes! ❤️</button>
-                <button id="noBtn" onmouseover="moveNo()" onclick="marahEffect()">Gak Mau 😜</button>
+                <button id="noBtn" onmouseover="moveNo()" onclick="marahEffect()" ontouchstart="moveNo()">Gak Mau 😜</button>
             </div>
         </div>
 
@@ -214,7 +205,7 @@
         </div>
     </div>
 
-    <audio id="bgm" loop preload="auto">
+    <audio id="bgm" loop>
         <source src="Troye Sivan - Angel Baby.mp3" type="audio/mpeg">
     </audio>
 
@@ -250,9 +241,7 @@
     }
 
     function explode() {
-        const x = window.innerWidth / 2;
-        const y = window.innerHeight / 2;
-        for(let i=0; i<25; i++) particles.push(new Heart(x, y));
+        for(let i=0; i<20; i++) particles.push(new Heart(window.innerWidth/2, window.innerHeight/2));
     }
 
     function animate() {
@@ -264,8 +253,7 @@
 
     function startApp() {
         document.getElementById('overlay').style.display = 'none';
-        const audio = document.getElementById('bgm');
-        audio.play().catch(e => console.log("Audio play failed"));
+        document.getElementById('bgm').play();
     }
 
     function cekJawaban() {
@@ -279,11 +267,11 @@
         }
     }
 
+    // MEMBATASI LOMPATAN TOMBOL AGAR TETAP DI DALAM BOX
     function moveNo() {
         const noBtn = document.getElementById('noBtn');
-        // Range dibatasi agar tidak keluar layar HP
-        const x = (Math.random() - 0.5) * 150;
-        const y = (Math.random() - 0.5) * 150;
+        const x = Math.random() * 80 - 40; 
+        const y = Math.random() * 40 - 20;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
@@ -304,7 +292,7 @@
         document.getElementById('letterBody').style.display = 'block';
         
         const titleText = "I Love You! ❤️";
-        const bodyText = "Happy Valentine's Day, Sayang! ❤️\n\nSemoga di hari yang penuh kasih sayang ini, kamu selalu bahagia, makin deket, dan makin saling mengerti 💕.\n\nSemangat terus menjalani harinya, aku bakal selalu support kamu✨. Makasih ya udah nemenin aku sampai hari ini (14 Februari 2026). Kamu adalah hal paling estetik yang pernah ada di hidupku.\n\nSemoga kita terus bareng-bareng ya. I love you more than anything can't express✨\n\nWleee😜";
+        const bodyText = "Happy Valentine's Day, Sayang! ❤️\n\nSemoga di hari yang penuh kasih sayang ini, kamu selalu bahagia, makin deket, dan makin saling mengerti 💕.\n\nSemangat terus menjalani harinya, aku bakal selalu support kamu✨. Makasih ya udah nemenin aku sampai hari ini. Kamu adalah hal paling estetik yang pernah ada di hidupku.\n\nSemoga kita terus bareng-bareng ya. I love you more than anything can't express✨\n\nWleee😜";
         
         let j = 0;
         function typeTitle() {
