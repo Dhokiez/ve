@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocolate for My Sweetest ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: radial-gradient(circle, #3d1e11 0%, #1a0a05 100%);
+            height: 100vh; display: flex;
+            justify-content: center; align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            color: #f3e5ab;
+        }
+
+        .chocolate-box {
+            text-align: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .chocolate-box:hover {
+            transform: scale(1.1);
+        }
+
+        .choco-img {
+            width: 200px;
+            filter: drop-shadow(0 0 20px rgba(178, 148, 94, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .msg {
+            margin-top: 20px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 1s;
+            padding: 0 20px;
+        }
+
+        .show-msg {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .falling-choco {
+            position: fixed;
+            top: -50px;
+            font-size: 25px;
+            z-index: 1;
+            user-select: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="chocoBgm" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="chocolate-box" id="box" onclick="giveLove()">
+        <img src="https://cdn-icons-png.flaticon.com/512/2913/2913550.png" class="choco-img" alt="Chocolate">
+        <div class="msg" id="msg">Cokelat ini semanis senyuman kamu.. 🍫, yang mewarnai hari hariku ✨</div>
+        <p id="instruction" style="font-size: 0.9em; margin-top: 15px; opacity: 0.8; letter-spacing: 1px;">(Klik cokelatnya untuk menerima hadiah! 🎁)</p>
+    </div>
+
+    <script>
+        function giveLove() {
+            // Putar Musik
+            const audio = document.getElementById('chocoBgm');
+            audio.play().catch(e => console.log("Musik butuh interaksi user"));
+
+            // Tampilkan Pesan
+            document.getElementById('msg').classList.add('show-msg');
+            document.getElementById('instruction').style.display = 'none';
+            
+            // Animasi Hujan Cokelat
+            setInterval(createFallingChoco, 200);
+        }
+
+        function createFallingChoco() {
+            const chocoItems = ['🍫', '🍪', '❤️', '✨', '🍩', '🍬', '🧁'];
+            const item = document.createElement('div');
+            item.classList.add('falling-choco');
+            item.innerHTML = chocoItems[Math.floor(Math.random() * chocoItems.length)];
+            item.style.left = Math.random() * 100 + 'vw';
+            item.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(item);
+
+            setTimeout(() => {
+                item.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
