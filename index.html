@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Special for You ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -12,7 +12,8 @@
             --glass: rgba(255, 255, 255, 0.15);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             margin: 0; padding: 0;
             font-family: 'Poppins', sans-serif;
@@ -28,10 +29,10 @@
         }
 
         .blob {
-            position: absolute; width: 300px; height: 300px;
+            position: absolute; width: 250px; height: 250px;
             background: var(--primary);
             filter: blur(80px); border-radius: 50%;
-            opacity: 0.4; animation: move 20s infinite alternate;
+            opacity: 0.3; animation: move 20s infinite alternate;
         }
 
         @keyframes move {
@@ -39,112 +40,94 @@
             to { transform: translate(100%, 80%); }
         }
 
-        /* --- PERBAIKAN INPUT AGAR TULISAN TERBACA JELAS --- */
-        #userAns {
-            background: rgba(255, 255, 255, 0.2) !important; 
-            border: 2px solid rgba(255, 255, 255, 0.4) !important;
-            border-radius: 15px; 
-            padding: 12px; 
-            width: 100%; 
-            color: #ffffff !important; /* Warna teks saat mengetik jadi putih */
-            outline: none; 
-            margin: 15px 0; 
-            text-align: center;
-            font-size: 1em;
-            font-weight: 400;
-        }
-
-        /* Mengatur warna tulisan "Jawabannya apa hayo?" (Placeholder) */
-        #userAns::placeholder {
-            color: rgba(255, 255, 255, 0.8) !important; /* Putih terang, bukan abu-abu */
-            opacity: 1; /* Supaya warnanya tidak pudar di beberapa browser */
-        }
-        /* ------------------------------------------------- */
-
+        /* --- CONTAINER RESPONSIVE --- */
         .container {
             position: relative; z-index: 10;
-            width: 90%; max-width: 420px;
-            padding: 30px; border-radius: 40px;
+            width: 90%; max-width: 400px;
+            padding: 25px; border-radius: 30px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             text-align: center;
         }
 
+        /* --- FOTO & HADIAH --- */
         .gift-container img {
-            width: 130px; border-radius: 15px; margin-bottom: 15px;
-        }
-
-        #ngambek-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            z-index: 2000; display: none; flex-direction: column;
-            justify-content: center; align-items: center; color: white;
-            text-align: center; padding: 20px;
+            width: 110px; border-radius: 15px; margin-bottom: 10px;
         }
 
         .photo-wrap {
-            position: relative; display: none; margin: 0 auto 20px;
-            width: 150px; height: 150px;
+            position: relative; display: none; margin: 0 auto 15px;
+            width: 130px; height: 130px;
         }
         .photo-wrap img {
             width: 100%; height: 100%; border-radius: 50%;
             object-fit: cover; border: 4px solid white;
-            box-shadow: 0 0 30px var(--primary);
+            box-shadow: 0 0 20px var(--primary);
             animation: pulse 3s infinite;
         }
 
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
-            70% { box-shadow: 0 0 30px 20px rgba(255, 77, 109, 0); }
+            70% { box-shadow: 0 0 20px 15px rgba(255, 77, 109, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
         }
 
         h2, h3 {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.2em; color: white; margin-bottom: 10px;
+            font-size: 1.8em; color: white; margin-bottom: 8px;
             background: linear-gradient(to right, #fff, var(--secondary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
+        /* --- BOX SURAT --- */
         #letterBody {
-            font-size: 0.95em; 
+            font-size: 0.85em; 
             color: rgba(255,255,255,0.95);
-            line-height: 1.8; 
+            line-height: 1.6; 
             text-align: left;
-            margin-top: 15px; 
+            margin-top: 10px; 
             display: none;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px; 
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-height: 250px; 
+            padding: 15px; 
+            border-radius: 15px;
+            max-height: 200px; 
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: var(--secondary) transparent;
         }
 
-        #letterBody::-webkit-scrollbar { width: 5px; }
-        #letterBody::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+        /* --- INPUT --- */
+        #userAns {
+            background: rgba(255, 255, 255, 0.15); 
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 12px; padding: 10px; 
+            width: 100%; color: white;
+            outline: none; margin: 10px 0; text-align: center;
+            font-size: 0.9em;
+        }
+        #userAns::placeholder { color: rgba(255,255,255,0.6); }
 
+        /* --- TOMBOL --- */
         .btn-group {
-            display: flex; justify-content: center; gap: 15px; margin-top: 20px;
-            position: relative; height: 50px;
-            align-items: center;
+            display: flex; flex-direction: row; justify-content: center; 
+            gap: 10px; margin-top: 15px;
+            position: relative; min-height: 50px;
         }
 
         button {
             background: linear-gradient(45deg, var(--primary), #ff758f);
-            color: white; border: none; padding: 12px 25px;
-            border-radius: 30px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); transition: 0.3s;
+            color: white; border: none; padding: 10px 20px;
+            border-radius: 25px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(255, 77, 109, 0.3); transition: 0.3s;
+            font-size: 0.9em;
         }
 
         #noBtn { 
             background: #555; 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            position: relative;
+            transition: transform 0.3s ease;
+            white-space: nowrap;
         }
 
         canvas { position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
@@ -152,32 +135,46 @@
         #overlay {
             position: fixed; inset: 0; background: #0f0c29;
             z-index: 1000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white; padding: 20px;
+            text-align: center;
+        }
+
+        #ngambek-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 2000; display: none; flex-direction: column;
             justify-content: center; align-items: center; color: white;
+            text-align: center; padding: 30px;
         }
 
         .choco-btn {
             background: linear-gradient(45deg, #603813, #b2945e) !important;
-            margin-top: 15px;
-            display: none;
+            margin-top: 15px; display: none; width: 100%;
+        }
+
+        /* Media Query untuk Layar Sangat Kecil */
+        @media (max-height: 600px) {
+            .container { padding: 15px; }
+            .photo-wrap { width: 100px; height: 100px; }
+            h3 { font-size: 1.5em; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-blobs">
-        <div class="blob" style="top: 10%; left: 10%;"></div>
-        <div class="blob" style="bottom: 10%; right: 10%; background: #23a6d5;"></div>
+        <div class="blob" style="top: 10%; left: 5%;"></div>
+        <div class="blob" style="bottom: 10%; right: 5%; background: #23a6d5;"></div>
     </div>
 
     <canvas id="canvas"></canvas>
 
     <div id="overlay">
-        <h1 style="font-family: 'Dancing Script'; font-size: 3em; text-align: center; padding: 0 20px;">Buat Kamu Yang Tersayang...</h1>
+        <h1 style="font-family: 'Dancing Script'; font-size: 2.5em;">Buat Kamu Yang Tersayang...</h1>
         <button onclick="startApp()">Klik untuk Membuka ✨</button>
     </div>
 
     <div id="ngambek-overlay">
-        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenpjNTBkeW9xdjFpenh1c3Y0MmhsMjVyeHVxcGxlbTl2ajZqZmp0YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fFa05KbZowXiEIyRse/giphy.gif" width="200" style="border-radius: 20px;">
+        <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExenpjNTBkeW9xdjFpenh1c3Y0MmhsMjVyeHVxcGxlbTl2ajZqZmp0YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fFa05KbZowXiEIyRse/giphy.gif" width="180" style="border-radius: 20px;">
         <h2 style="margin-top: 20px;">IH KOK GITU?! </h2>
         <p>Pilih "Yes" dong, masa gak mau parah sihh...🙃</p>
         <button onclick="tutupNgambek()">Balik</button>
@@ -189,10 +186,10 @@
                 <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGh0bjBsYWg5NTVydzVleXRpdGJoMXQ0ZG5ydmdrcTEwaXBrdXZpYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GJACwlJbtiWrYeWoqM/giphy.gif" alt="Cute Cat">
             </div>
             <h3>Tebak Tebakan dulu..</h3>
-            <p style="color: #eee; font-size: 0.9em;">Apa bedanya kamu sama internet?</p>
-            <input type="text" id="userAns" placeholder="Jawabannya apa hayo?">
+            <p style="color: #eee; font-size: 0.85em;">Apa bedanya kamu sama internet?</p>
+            <input type="text" id="userAns" placeholder="Jawabannya apa hayo?" autocomplete="off">
             <button onclick="cekJawaban()">Cek Jawaban</button>
-            <p id="hint" style="font-size: 0.8em; margin-top: 15px; color: var(--secondary);"></p>
+            <p id="hint" style="font-size: 0.75em; margin-top: 10px; color: var(--secondary);"></p>
         </div>
 
         <div id="choice-section" style="display: none;">
@@ -200,7 +197,7 @@
                 <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY25nMDBhOTR1Y2k0em04NWdndG44enl0Y3B5Y2VkODYxdGxlZ3NveiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IzXiddo2twMmdmU8Lv/giphy.gif" alt="Cute Choice">
             </div>
             <h3>Jawaban Benar! ✨</h3>
-            <p style="color: #eee;">Tapi yakin mau buka suratnya sekarang?</p>
+            <p style="color: #eee; font-size: 0.85em;">Tapi yakin mau buka suratnya sekarang?</p>
             <div class="btn-group">
                 <button onclick="showFinal()">Yes! ❤️</button>
                 <button id="noBtn" onmouseover="moveNo()" onclick="marahEffect()">Gak Mau 😜</button>
@@ -217,7 +214,7 @@
         </div>
     </div>
 
-    <audio id="bgm" loop>
+    <audio id="bgm" loop preload="auto">
         <source src="Troye Sivan - Angel Baby.mp3" type="audio/mpeg">
     </audio>
 
@@ -236,12 +233,12 @@
     class Heart {
         constructor(x, y) {
             this.x = x; this.y = y;
-            this.size = Math.random() * 10 + 5;
-            this.speedX = (Math.random() - 0.5) * 8;
-            this.speedY = (Math.random() - 0.5) * 8;
+            this.size = Math.random() * 8 + 4;
+            this.speedX = (Math.random() - 0.5) * 6;
+            this.speedY = (Math.random() - 0.5) * 6;
             this.opacity = 1;
         }
-        update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.01; }
+        update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.015; }
         draw() {
             ctx.globalAlpha = this.opacity;
             ctx.fillStyle = "#ff4d6d"; ctx.beginPath();
@@ -253,7 +250,9 @@
     }
 
     function explode() {
-        for(let i=0; i<30; i++) particles.push(new Heart(window.innerWidth/2, window.innerHeight/2));
+        const x = window.innerWidth / 2;
+        const y = window.innerHeight / 2;
+        for(let i=0; i<25; i++) particles.push(new Heart(x, y));
     }
 
     function animate() {
@@ -265,7 +264,8 @@
 
     function startApp() {
         document.getElementById('overlay').style.display = 'none';
-        document.getElementById('bgm').play();
+        const audio = document.getElementById('bgm');
+        audio.play().catch(e => console.log("Audio play failed"));
     }
 
     function cekJawaban() {
@@ -281,9 +281,9 @@
 
     function moveNo() {
         const noBtn = document.getElementById('noBtn');
-        const moveRange = 80; 
-        const x = (Math.random() - 0.5) * moveRange * 2;
-        const y = (Math.random() - 0.5) * moveRange * 2;
+        // Range dibatasi agar tidak keluar layar HP
+        const x = (Math.random() - 0.5) * 150;
+        const y = (Math.random() - 0.5) * 150;
         noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
@@ -293,8 +293,7 @@
 
     function tutupNgambek() {
         document.getElementById('ngambek-overlay').style.display = 'none';
-        const noBtn = document.getElementById('noBtn');
-        noBtn.style.transform = `translate(0px, 0px)`; 
+        document.getElementById('noBtn').style.transform = `translate(0px, 0px)`; 
     }
 
     function showFinal() {
@@ -305,7 +304,7 @@
         document.getElementById('letterBody').style.display = 'block';
         
         const titleText = "I Love You! ❤️";
-        const bodyText = "Happy Valentine's Day, Sayang! ❤️\n\nSemoga di hari yang penuh kasih sayang ini, kamu selalu bahagia, dan juga kita makin deket, makin saling mengerti satu sama lain, semoga setiap impian kita satu per satu bisa terwujud dengan cara yang terbaik💕.\n\nSemangat terus menjalani harinya, aku bakal selalu support kamu✨. Makasih ya udah nemenin aku sampai hari ini (14 Februari 2026). Kamu adalah hal paling estetik yang pernah ada di hidupku.\n\ndan Semoga kita terus bareng-bareng ya. I love you more than anything can't express✨\n\nWleee😜";
+        const bodyText = "Happy Valentine's Day, Sayang! ❤️\n\nSemoga di hari yang penuh kasih sayang ini, kamu selalu bahagia, makin deket, dan makin saling mengerti 💕.\n\nSemangat terus menjalani harinya, aku bakal selalu support kamu✨. Makasih ya udah nemenin aku sampai hari ini (14 Februari 2026). Kamu adalah hal paling estetik yang pernah ada di hidupku.\n\nSemoga kita terus bareng-bareng ya. I love you more than anything can't express✨\n\nWleee😜";
         
         let j = 0;
         function typeTitle() {
@@ -322,13 +321,12 @@
                 document.getElementById('letterBody').scrollTop = document.getElementById('letterBody').scrollHeight;
                 i++; setTimeout(typeBody, 45);
             } else {
-                document.getElementById('chocoBtn').style.display = 'inline-block';
+                document.getElementById('chocoBtn').style.display = 'block';
             }
         }
         typeTitle();
-        setInterval(explode, 2000);
+        setInterval(explode, 2500);
     }
 </script>
 </body>
-
 </html>
